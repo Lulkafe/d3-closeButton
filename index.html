@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="d3CloseButton.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div id="vis"></div>
+<script>
+    var height = 500,
+        width = 700,
+        size = 100,
+        svg = d3.select("#vis").append("svg").attr("width", width).attr("height", height),
+        xs = [50, 200, 350],
+        clsbtn1 = new d3CloseButton(),
+        clsbtn2 = new d3CloseButton(),
+        clsbtn3 = new d3CloseButton();
+
+    svg.append("text").attr("x", 30).attr("y", 20).text("Click close buttons");
+    
+
+    //Setting up each close button. Default values are already set, so you can ignore this step
+    clsbtn1.size(30).isCircle(true).borderStrokeWidth(3).crossStrokeWidth(5);
+    clsbtn2.size(20).rx(4).ry(4);
+
+    /* The remaining part is just for demonstration
+       The only necessary step is to do selection.call(closeButton_object)
+       (In this example, the corresponding part is, for example, "g.call(clsbtn1)"); */
+    var gUpper = svg.append("g").selectAll("g").data(xs).enter().append("g"),
+        gLower = svg.append("g").selectAll("g").data(xs).enter().append("g");
+
+    gUpper.append("rect")
+            .attr("x", function(d){ return d;})
+            .attr("y", 50)
+            .attr("width", size)
+            .attr("height",size)
+            .style({"fill": "#E6F9FF", "stroke-width": 2, "stroke": "black"});
+
+    gLower.append("rect")
+            .attr("x", function(d){ return d;})
+            .attr("y", 200)
+            .attr("width", size)
+            .attr("height",size)
+            .style({"fill": "#CFF0CA", "stroke-width": 2, "stroke": "black"});
+
+    gUpper.each(function (d,i) {
+        var g = d3.select(this);
+        clsbtn1.x(d + (size / 1.3)).y(70).clickEvent(function(){ g.remove(); });
+        g.call(clsbtn1);
+    })
+
+    gLower.each(function (d,i) {
+        var g = d3.select(this);
+        clsbtn2.x(d + (size / 1.4)).y(210).clickEvent(function(){ g.remove(); });
+        g.call(clsbtn2);
+    })
+
+
+</script>
+</body>
+</html>
